@@ -1,3 +1,4 @@
+import 'package:codeplus/features/courses_widget/screen/courses_info_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -15,25 +16,44 @@ class CoursesInfoWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+
     final items = homeModel.items ?? [];
 
-    return GestureDetector(
-      onDoubleTap: () {
-        print('hi');
-      },
-      child: Container(
-        width: Responsive.isMobile(context)
-            ? getAllWidth(context)
-            : getAllWidth(context),
-        height: (getAllHeight(context) - getWidth(context, 0.8))
-            .clamp(0, double.infinity), // Ensure height is valid
-        child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          shrinkWrap: true,
-          itemCount: items.length,
-          itemBuilder: (context, index) {
-            final helper = items[index];
-            return Container(
+    return Container(
+      width: getAllWidth(context),
+      height: getHeight(context, 0.62),
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        shrinkWrap: true,
+        itemCount: items.length,
+        itemBuilder: (context, index) {
+          final helper = items[index];
+          final String courseId = helper.id ?? 'unknown';
+          final String imageUrl = helper.imageUrl ?? 'no image';
+          final String description = helper.description ?? 'no desc';
+          final String courseName = helper.courseName ?? 'no name';
+          final dynamic category = helper.category ?? 'no catgory';
+          final Object price = helper.coursePrice ?? 'no price';
+          final bool? isInBasket = helper.checkCart;
+          return GestureDetector(
+            onDoubleTap: () {
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                CoursesInfoScreen.screenId,
+                    (route) => false,
+                arguments: {
+                  'id': courseId,
+                  'imageUrl' : imageUrl,
+                  'description' : description,
+                  'category' : category,
+                  'courseName' : courseName,
+                  'coursePrice' : price,
+                  'CheckCart' : isInBasket ,
+                },
+              );
+            },
+            child: Container(
               padding: EdgeInsets.all(10.sp),
               margin: EdgeInsets.all(10.sp),
               decoration: BoxDecoration(
@@ -45,21 +65,21 @@ class CoursesInfoWidget extends StatelessWidget {
                 children: [
                   helper.courseImage != null
                       ? Padding(
-                          padding: EdgeInsets.all(10.sp),
-                          child: ClipRRect(
-                            borderRadius: getBorderRadiusFunc(10),
-                            child: Image.network(
-                              helper.imageUrl ?? '',
-                              width: Responsive.isMobile(context)
-                                  ? getAllWidth(context) - 50
-                                  : getAllWidth(context),
-                              fit: BoxFit.fitWidth,
-                              errorBuilder: (context, error, stackTrace) {
-                                return Icon(Icons.error, color: Colors.red);
-                              },
-                            ),
-                          ),
-                        )
+                    padding: EdgeInsets.all(10.sp),
+                    child: ClipRRect(
+                      borderRadius: getBorderRadiusFunc(10),
+                      child: FadeInImage(
+                        width: Responsive.isMobile(context)
+                            ? getAllWidth(context) - 50
+                            : getAllWidth(context),
+                        fit: BoxFit.fitWidth,
+                        placeholder: AssetImage('assets/images/logo.jpg'),
+                        image: NetworkImage(
+                          helper.imageUrl ?? '',
+                        ),
+                      ),
+                    ),
+                  )
                       : Icon(Icons.error),
                   Align(
                     alignment: Alignment.centerRight,
@@ -93,7 +113,6 @@ class CoursesInfoWidget extends StatelessWidget {
                       ),
                       Text(
                         setCategoryById(helper.category?[0] ?? 'نامشخص'),
-                        // Handle null safety
                         style: TextStyle(
                           fontFamily: 'sahel',
                           color: Colors.white,
@@ -110,7 +129,6 @@ class CoursesInfoWidget extends StatelessWidget {
                       backgroundColor: primaryColor,
                       fixedSize: Size(
                         getAllWidth(context).clamp(0, double.infinity),
-                        // Ensure valid width
                         50,
                       ),
                       shape: RoundedRectangleBorder(
@@ -118,7 +136,21 @@ class CoursesInfoWidget extends StatelessWidget {
                       ),
                     ),
                     onPressed: () {
-                      // Go to more info page
+                      Navigator.pushNamedAndRemoveUntil(
+                        context,
+                        CoursesInfoScreen.screenId,
+                            (route) => false,
+                        arguments: {
+                          'id': courseId,
+                          'imageUrl' : imageUrl,
+                          'description' : description,
+                          'courseName' : courseName,
+                          'category' : category,
+                          'coursePrice' : price,
+                          'CheckCart' : isInBasket ,
+
+                        },
+                      );
                     },
                     child: Text(
                       'مشاهده دوره',
@@ -131,9 +163,9 @@ class CoursesInfoWidget extends StatelessWidget {
                   ),
                 ],
               ),
-            );
-          },
-        ),
+            ),
+          );
+        },
       ),
     );
   }

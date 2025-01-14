@@ -17,6 +17,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../widget/aboutUs_widget.dart';
 import '../widget/courses_features_widget.dart';
 import '../widget/courses_info_widget.dart';
+import 'package:shimmer/shimmer.dart';
+
+import '../widget/shimmer_loading_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -57,12 +60,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       BlocBuilder<HomeBloc, HomeState>(
                         builder: (context, state) {
                           if (state is HomeLoadingState) {
-                            return Center(child: CircularProgressIndicator());
+                            return Center(child: ShimmerLoadingWidget());
                           }
                           if (state is HomeCompletedState) {
-                            return HomeContentWidget(
-                              homeModel: state.homeModel,
-                            );
+                            return HomeContentWidget(homeModel: state.homeModel);
                           }
                           if (state is HomeErrorState) {
                             return ErrorScreenWidget(
@@ -109,9 +110,7 @@ class HomeContentWidget extends StatelessWidget {
           icon: Icons.access_time_filled_outlined,
         ),
         CoursesFeaturesWidget(
-          title: 'پشتیبانی داعمی',
-          icon: Icons.support_agent
-        ),
+            title: 'پشتیبانی داعمی', icon: Icons.support_agent),
         CoursesFeaturesWidget(
           title: 'آپدیت داعمی',
           icon: Icons.system_update_tv_sharp,
@@ -124,6 +123,4 @@ class HomeContentWidget extends StatelessWidget {
     );
   }
 }
-
-
 

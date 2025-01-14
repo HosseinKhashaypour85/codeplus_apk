@@ -1,5 +1,6 @@
 import 'package:codeplus/const/theme/colors.dart';
 import 'package:codeplus/features/auth_features/screen/auth_screen.dart';
+import 'package:codeplus/features/auth_features/screen/auth_success_screen.dart';
 import 'package:codeplus/features/public_features/screen/bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -18,8 +19,13 @@ class PhoneAuthScreen extends StatefulWidget {
 }
 
 class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final TextEditingController textEditingController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
+    final String phoneNumber =
+    ModalRoute.of(context)?.settings.arguments as String;
     return Scaffold(
       backgroundColor: primary2Color,
       body: SafeArea(
@@ -53,11 +59,12 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
                       Align(
                         alignment: Alignment.centerRight,
                         child: Text(
-                          'کد فعالسازی وارد شده به شماره خود را وارد کنید',
+                          'کد فعالسازی وارد شده به شماره $phoneNumber را وارد کنید',
                           style: TextStyle(
                             color: boxColors,
-                            fontSize: 18.sp,
+                            fontSize: 15.sp,
                             fontFamily: 'sahel',
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
                       ),
@@ -66,7 +73,8 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
                       ),
                       TextButton(
                         onPressed: () {
-                          Navigator.pushNamed(context, BottomNavBarScreen.screenId);
+                          Navigator.pushNamed(
+                              context, BottomNavBarScreen.screenId);
                         },
                         child: Align(
                           alignment: Alignment.centerRight,
@@ -80,7 +88,12 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
                           ),
                         ),
                       ),
-                      ActivationCodeWidget(),
+                      // فرم برای ورودی‌ها
+                      Form(
+                        key: formKey,
+                        child: ActivationCodeWidget(
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -97,7 +110,16 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
                   borderRadius: getBorderRadiusFunc(5),
                 ),
               ),
-              onPressed: () {},
+              onPressed: () {
+                if (formKey.currentState!.validate()) {
+                  Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    AuthSuccessScreen.screenId,
+                        (route) => false,
+                    arguments: phoneNumber,
+                  );
+                }
+              },
               child: Text(
                 'مرحله بعد',
                 style: TextStyle(
@@ -113,3 +135,4 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
     );
   }
 }
+

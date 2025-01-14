@@ -15,13 +15,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   AuthBloc(this.repository) : super(AuthInitial()) {
     on<CallAuthEvent>(
-          (event, emit) async {
+      (event, emit) async {
         emit(AuthLoadingState());
         try {
           final Response response = await repository.callSignUpApi(
             event.phoneNumber!,
             event.password!,
-            event.passwordConfirm!,
+            event.passwordConfirm!
           );
           final String? token = response.data['token'];
           emit(AuthCompletedState(token));
@@ -33,7 +33,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       },
     );
     on<CallSignInAuthEvent>((event, emit) async {
-
       if (event.phoneNumber == null || event.phoneNumber!.isEmpty) {
         emit(AuthErrorState(
             ErrorMessageClass(errorMsg: "Phone number cannot be empty")));
@@ -47,10 +46,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
       emit(AuthLoadingState());
       try {
-        final Response response = await repository.callSignInApi(
-            event.phoneNumber!, event.password!);
+        final Response response =
+            await repository.callSignInApi(event.phoneNumber!, event.password!);
         final String? token = response.data['token'];
-        emit(AuthCompletedState(token));
+        emit(SignInAuthCompletedState(token));
       } on DioException catch (e) {
         emit(AuthErrorState(
           ErrorMessageClass(errorMsg: ErrorExceptions().fromError(e)),

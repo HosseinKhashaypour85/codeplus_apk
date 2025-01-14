@@ -1,6 +1,10 @@
 import 'package:codeplus/features/auth_features/screen/auth_screen.dart';
+import 'package:codeplus/features/auth_features/screen/check_auth.dart';
+import 'package:codeplus/features/cart_features/screen/cart_screen.dart';
 import 'package:codeplus/features/home_features/screen/home_screen.dart';
 import 'package:codeplus/features/public_features/logic/bottomnav/bottomnav_cubit.dart';
+import 'package:codeplus/features/public_features/logic/token_checker/token_check_cubit.dart';
+import 'package:codeplus/features/search_features/screen/search_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -18,10 +22,15 @@ class BottomNavBarScreen extends StatefulWidget {
 class _BottomNavBarScreenState extends State<BottomNavBarScreen> {
   List<Widget>screenList = [
     HomeScreen(),
-    Container(),
-    Container(),
-    AuthScreen(),
+    SearchScreen(),
+    CartScreen(),
+    CheckAuthScreen(),
   ];
+  @override
+  void initState() {
+    super.initState();
+    BlocProvider.of<TokenCheckCubit>(context).tokenChecker();
+  }
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<BottomnavCubit, int>(

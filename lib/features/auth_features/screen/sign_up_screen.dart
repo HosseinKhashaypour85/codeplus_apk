@@ -2,6 +2,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:codeplus/const/shape/border_radius.dart';
 import 'package:codeplus/const/theme/colors.dart';
 import 'package:codeplus/features/auth_features/logic/bloc/auth_bloc.dart';
+import 'package:codeplus/features/auth_features/screen/phone_auth_screen.dart';
 import 'package:codeplus/features/auth_features/services/auth_api_repository.dart';
 import 'package:codeplus/features/auth_features/widget/password_field_widget.dart';
 import 'package:codeplus/features/public_features/functions/secure_storage/secure_storage.dart';
@@ -30,7 +31,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController phoneEditingController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController =
-  TextEditingController();
+      TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   bool isShowUse = false;
 
@@ -54,11 +55,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 if (state is AuthCompletedState) {
                   SecureStorageClass().saveUserToken(state.token);
                   getSnackBarWidget(
-                      context, 'با موفقیت وارد شدید', Colors.green);
+                    context,
+                    'شماره موبایل تایید شد',
+                    Colors.green,
+                  );
                   Navigator.pushNamedAndRemoveUntil(
                     context,
-                    AuthSuccessScreen.screenId,
-                        (route) => false,
+                    PhoneAuthScreen.screenId,
+                    (route) => false,
+                    arguments: phoneEditingController.text,
                   );
                 } else if (state is AuthErrorState) {
                   getSnackBarWidget(
@@ -112,10 +117,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               TextFormFieldMobileWidget(
                                 labelText: 'شماره موبایل',
                                 icon:
-                                const Icon(Icons.mobile_friendly_outlined),
+                                    const Icon(Icons.mobile_friendly_outlined),
                                 textInputAction: TextInputAction.done,
                                 floatingLabelBehavior:
-                                FloatingLabelBehavior.auto,
+                                    FloatingLabelBehavior.auto,
                                 controller: phoneEditingController,
                                 suffixIcon: null,
                               ),
@@ -124,7 +129,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 icon: const Icon(Icons.password),
                                 textInputAction: TextInputAction.done,
                                 floatingLabelBehavior:
-                                FloatingLabelBehavior.auto,
+                                    FloatingLabelBehavior.auto,
                                 controller: passwordController,
                                 suffixIcon: null,
                               ),
@@ -133,20 +138,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 icon: const Icon(Icons.password),
                                 textInputAction: TextInputAction.done,
                                 floatingLabelBehavior:
-                                FloatingLabelBehavior.auto,
+                                    FloatingLabelBehavior.auto,
                                 controller: confirmPasswordController,
                                 suffixIcon: null,
                               ),
                               Row(
                                 children: [
                                   Checkbox(
-                                      value: isShowUse,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          isShowUse = !isShowUse;
-                                        });
-                                      },
-                                      activeColor: primaryColor,
+                                    value: isShowUse,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        isShowUse = !isShowUse;
+                                      });
+                                    },
+                                    activeColor: primaryColor,
                                   ),
                                   Text(
                                     'قوانین و شرایط کد پلاس را میپذریم',
@@ -176,7 +181,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               ),
                             ),
                             onPressed: () {
-                              if (formKey.currentState!.validate() && isShowUse) {
+                              if (formKey.currentState!.validate() &&
+                                  isShowUse) {
                                 BlocProvider.of<AuthBloc>(context).add(
                                   CallAuthEvent(
                                     phoneEditingController.text,

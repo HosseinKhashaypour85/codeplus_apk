@@ -9,14 +9,15 @@ class CallAuthEvent extends AuthEvent {
   final String? passwordConfirm;
 
   CallAuthEvent(
-     this.phoneNumber,
-     this.password,
-     this.passwordConfirm,
+    this.phoneNumber,
+    this.password,
+    this.passwordConfirm,
   );
 }
 
-class CallSignInAuthEvent extends AuthEvent{
+class CallSignInAuthEvent extends AuthEvent {
   final String? phoneNumber;
   final String? password;
-  CallSignInAuthEvent(this.phoneNumber , this.password);
+
+  CallSignInAuthEvent(this.phoneNumber, this.password);
 }

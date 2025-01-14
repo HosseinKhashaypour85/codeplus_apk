@@ -3,6 +3,7 @@ import 'package:codeplus/features/auth_features/screen/auth_success_screen.dart'
 import 'package:codeplus/features/auth_features/screen/sign_up_screen.dart';
 import 'package:codeplus/features/auth_features/widget/password_field_widget.dart';
 import 'package:codeplus/features/auth_features/widget/textformfield_widget.dart';
+import 'package:codeplus/features/public_features/functions/secure_storage/secure_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -110,33 +111,37 @@ class AuthSectionWidget extends StatelessWidget {
             padding: EdgeInsets.all(10.sp),
             margin: EdgeInsets.all(10.sp),
             width: getAllWidth(context),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                  backgroundColor: primaryColor,
-                  fixedSize: Size(
-                    getWidth(context, 3.29),
-                    getHeight(context, 0.057),
-                  ),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: getBorderRadiusFunc(5))),
-              onPressed: () {
-                if (formController.currentState!.validate()) {
-                  context.read<AuthBloc>().add(
-                    CallSignInAuthEvent(
-                      numberController.text.trim(),
-                      passwordController.text.trim(),
+            child: Column(
+              children: [
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: primaryColor,
+                      fixedSize: Size(
+                        getWidth(context, 3.29),
+                        getHeight(context, 0.057),
+                      ),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: getBorderRadiusFunc(5))),
+                  onPressed: () {
+                    if (formController.currentState!.validate()) {
+                      context.read<AuthBloc>().add(
+                            CallSignInAuthEvent(
+                              numberController.text.trim(),
+                              passwordController.text.trim(),
+                            ),
+                          );
+                    }
+                  },
+                  child: Text(
+                    'مرحله بعد',
+                    style: TextStyle(
+                      fontFamily: 'sahel',
+                      color: Colors.white,
+                      fontSize: 16.sp,
                     ),
-                  );
-                }
-              },
-              child: Text(
-                'مرحله بعد',
-                style: TextStyle(
-                  fontFamily: 'sahel',
-                  color: Colors.white,
-                  fontSize: 16.sp,
+                  ),
                 ),
-              ),
+              ],
             ),
           ),
         ],

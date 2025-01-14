@@ -41,35 +41,41 @@ class HomeModel {
 class Items {
   Items({
       this.category, 
+      this.checkCart, 
       this.collectionId, 
       this.collectionName, 
       this.courseImage, 
       this.courseName, 
       this.coursePrice, 
       this.created, 
+      this.description, 
       this.id, 
       this.imageUrl, 
       this.updated,});
 
   Items.fromJson(dynamic json) {
     category = json['category'] != null ? json['category'].cast<String>() : [];
+    checkCart = json['checkCart'];
     collectionId = json['collectionId'];
     collectionName = json['collectionName'];
     courseImage = json['courseImage'];
     courseName = json['courseName'];
     coursePrice = json['coursePrice'];
     created = json['created'];
+    description = json['description'];
     id = json['id'];
     imageUrl = json['imageUrl'];
     updated = json['updated'];
   }
   List<String>? category;
+  bool? checkCart;
   String? collectionId;
   String? collectionName;
   String? courseImage;
   String? courseName;
   int? coursePrice;
   String? created;
+  String? description;
   String? id;
   String? imageUrl;
   String? updated;
@@ -77,12 +83,14 @@ class Items {
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['category'] = category;
+    map['checkCart'] = checkCart;
     map['collectionId'] = collectionId;
     map['collectionName'] = collectionName;
     map['courseImage'] = courseImage;
     map['courseName'] = courseName;
     map['coursePrice'] = coursePrice;
     map['created'] = created;
+    map['description'] = description;
     map['id'] = id;
     map['imageUrl'] = imageUrl;
     map['updated'] = updated;

@@ -1,4 +1,7 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:codeplus/features/auth_features/logic/pref/save_phone_number.dart';
+import 'package:codeplus/features/public_features/functions/secure_storage/secure_storage.dart';
+import 'package:codeplus/features/public_features/screen/bottom_nav_bar.dart';
 import 'package:codeplus/features/public_features/widget/snack_bar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -38,16 +41,23 @@ class _AuthScreenState extends State<AuthScreen> {
       create: (context) => AuthBloc(AuthApiRepository()),
       child: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
-          if (state is AuthErrorState) {
+          if (state is SignInErrorState) {
             getSnackBarWidget(
               context,
               state.errorMessageClass.errorMsg!,
               Colors.red,
             );
           }
-          if (state is AuthCompletedState) {
-            getSnackBarWidget(context, 'عالی', Colors.green);
-            print('object');
+          if (state is SignInAuthCompletedState) {
+            SecureStorageClass().saveUserToken(state.token);
+            savePhoneNumber(numberController.text);
+            getSnackBarWidget(context, 'ورود موفقیت آمیز بود', Colors.green);
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              BottomNavBarScreen.screenId,
+              (route) => false,
+              arguments: numberController.text,
+            );
           }
         },
         builder: (context, state) {

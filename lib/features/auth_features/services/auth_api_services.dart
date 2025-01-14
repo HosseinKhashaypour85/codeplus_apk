@@ -2,7 +2,13 @@ import 'package:dio/dio.dart';
 
 //Api for sign up
 class AuthApiServices {
-  final Dio _dio = Dio();
+  final Dio _dio = Dio(
+    BaseOptions(
+      connectTimeout: const Duration(seconds: 30),
+      receiveTimeout: const Duration(seconds: 30),
+      sendTimeout: const Duration(seconds: 30),
+    ),
+  );
 
   Future<Response> callSignUpApi(
       String phoneNumber, String password, String confirmPassword) async {
@@ -40,5 +46,4 @@ class AuthApiServices {
       throw Exception('خطا در ورود: ${e.message}');
     }
   }
-
 }

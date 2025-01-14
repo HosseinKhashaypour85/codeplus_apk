@@ -9,7 +9,6 @@ class AuthLoadingState extends AuthState {}
 
 class AuthCompletedState extends AuthState {
   final String? token;
-
   AuthCompletedState(this.token);
 }
 
@@ -29,5 +28,6 @@ class SignInAuthCompletedState extends AuthState {
 
 class SignInErrorState extends AuthState {
   final ErrorMessageClass errorMessageClass;
+
   SignInErrorState(this.errorMessageClass);
 }
